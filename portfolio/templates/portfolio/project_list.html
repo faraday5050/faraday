@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faraday Data Lab | Yahaya Eneojo Michael</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(270deg, #1A2A5E, #2B6CB0, #1A365D, #2C5282);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            padding: 4rem 0 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .moving-text-container {
+            position: absolute;
+            top: 15px;
+            right: 0;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        
+        .moving-text {
+            display: inline-block;
+            animation: scrollRightToLeft 15s linear infinite;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 0 0 10px rgba(100, 202, 255, 0.5);
+        }
+        
+        @keyframes scrollRightToLeft {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .header::before {
+            content: "📊 🤖 📈 🧠 💻 🔍 📉 🎯 🧮 ⚙️ 📐 🔢 🔬 🧪 📡 🎲";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 70px;
+            opacity: 0.08;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            pointer-events: none;
+            animation: floatIcons 20s linear infinite;
+        }
+        
+        @keyframes floatIcons {
+            0% { transform: translateY(0px); opacity: 0.08; }
+            50% { transform: translateY(-10px); opacity: 0.12; }
+            100% { transform: translateY(0px); opacity: 0.08; }
+        }
+        
+        .header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.06"><text x="15" y="30" font-size="22">📊</text><text x="150" y="50" font-size="28">🤖</text><text x="35" y="120" font-size="18">📈</text><text x="130" y="150" font-size="24">🧠</text><text x="80" y="25" font-size="16">🔍</text><text x="10" y="180" font-size="30">💻</text><text x="160" y="100" font-size="20">📉</text><text x="100" y="190" font-size="14">🎯</text><text x="175" y="175" font-size="18">🧮</text><text x="50" y="60" font-size="12">⚙️</text></svg>');
+            background-repeat: repeat;
+            background-size: 180px;
+            pointer-events: none;
+            animation: slowFloat 30s linear infinite alternate;
+        }
+        
+        @keyframes slowFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-15px); }
+        }
+        
+        .profile-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .profile-wrapper {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+        
+        .profile-ring {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #00D4FF, #2B6CB0, #64CAFF, #00D4FF, #2B6CB0, #64CAFF, #00D4FF);
+            animation: rotateRing 3s linear infinite, pulseRing 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulseRing {
+            0% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+            50% { opacity: 1; box-shadow: 0 0 0 15px rgba(0, 212, 255, 0.2); }
+            100% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
+        
+        .profile-image-container {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            background: #1a1a2e;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .placeholder-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d2d4a, #1a1a2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #64CAFF, #00D4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .header .title {
+            font-size: 1.2rem;
+            color: #64CAFF;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        
+        .header .bio {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 0.95rem;
+            color: #d0d0d0;
+        }
+        
+        /* Navigation Bar */
+        .nav-bar {
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 200, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64CAFF;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+        
+        .nav-links a:hover {
+            color: #64CAFF;
+        }
+        
+        .nav-resume {
+            background: transparent;
+            border: 1.5px solid #64CAFF;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64CAFF;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .nav-resume:hover {
+            background: #64CAFF;
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(100, 202, 255, 0.3);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Section Titles */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff, #64CAFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .section-subtitle {
+            color: #64CAFF;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        
+        .title-underline {
+            width: 60px;
+            height: 3px;
+            background: #64CAFF;
+            margin: 0.5rem auto 0;
+            border-radius: 3px;
+        }
+        
+        /* About Section */
+        .about-section {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .about-section:hover {
+            transform: translateY(-3px);
+            border-color: rgba(100, 200, 255, 0.5);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .soft-skills-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .skill-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 200, 255, 0.5);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        .skill-card h3 {
+            color: #64CAFF;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            border-left: 3px solid #64CAFF;
+            padding-left: 0.5rem;
+        }
+        
+        .skill-card ul {
+            list-style: none;
+        }
+        
+        .skill-card li {
+            padding: 0.3rem 0;
+            padding-left: 1rem;
+            position: relative;
+            font-size: 0.8rem;
+        }
+        
+        .skill-card li:before {
+            content: "▹";
+            color: #64CAFF;
+            position: absolute;
+            left: 0;
+        }
+        
+        .skill-card p {
+            color: #c0c0c0;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .project-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 200, 255, 0.3);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .project-content {
+            padding: 1.2rem;
+        }
+        
+        .project-title {
+            color: #64CAFF;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .project-tech {
+            font-size: 0.65rem;
+            color: #64CAFF;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+        
+        .project-description {
+            font-size: 0.75rem;
+            color: #c0c0c0;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, #2B6CB0, #64CAFF);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 202, 255, 0.3);
+        }
+        
+        /* Certifications Section */
+        .certifications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .cert-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cert-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 200, 255, 0.3);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        .cert-image-wrapper {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .cert-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .cert-card:hover .cert-image {
+            transform: scale(1.05);
+        }
+        
+        .cert-icon {
+            font-size: 3rem;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(100, 202, 255, 0.05);
+        }
+        
+        .cert-content {
+            padding: 1.2rem;
+            flex: 1;
+        }
+        
+        .cert-title {
+            color: #64CAFF;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .cert-issuer {
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cert-date, .cert-expiry, .cert-id {
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 0.2rem;
+        }
+        
+        .cert-description {
+            font-size: 0.8rem;
+            color: #c0c0c0;
+            margin: 0.8rem 0;
+            line-height: 1.4;
+        }
+        
+        .cert-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0.8rem 0;
+        }
+        
+        .cert-skill {
+            background: rgba(100, 202, 255, 0.15);
+            color: #64CAFF;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+        }
+        
+        .cert-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .cert-link {
+            display: inline-block;
+            color: #64CAFF;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .cert-link:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .verify-link {
+            background: rgba(100, 202, 255, 0.15);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+        
+        .view-link {
+            background: rgba(100, 202, 255, 0.15);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+        
+        /* Certificate Lightbox */
+        .cert-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        
+        .cert-lightbox.active {
+            display: flex;
+        }
+        
+        .cert-lightbox-image {
+            max-width: 90%;
+            max-height: 85%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+        
+        .cert-lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1002;
+        }
+        
+        .cert-lightbox-close:hover {
+            color: #64CAFF;
+            transform: scale(1.1);
+        }
+        
+        .cert-lightbox-caption {
+            margin-top: 20px;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            max-width: 80%;
+        }
+        
+        /* Passion Cards */
+        .passion-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .passion-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .passion-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 200, 255, 0.3);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        .passion-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .passion-card h4 {
+            color: #64CAFF;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .passion-card p {
+            font-size: 0.75rem;
+            color: #c0c0c0;
+        }
+        
+        /* Hobbies Grid */
+        .hobbies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .hobby-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+        }
+        
+        .hobby-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 200, 255, 0.3);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        .hobby-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hobby-card h4 {
+            color: #64CAFF;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .hobby-card p {
+            font-size: 0.7rem;
+            color: #c0c0c0;
+        }
+        
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 200, 255, 0.3);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .blog-card .blog-content {
+            padding: 1.2rem;
+        }
+        
+        .blog-meta {
+            font-size: 0.7rem;
+            color: #64CAFF;
+            margin-bottom: 0.5rem;
+        }
+        
+        .blog-card-title {
+            color: #64CAFF;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .blog-summary {
+            font-size: 0.8rem;
+            color: #c0c0c0;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .blog-tag {
+            background: rgba(100, 202, 255, 0.15);
+            color: #64CAFF;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+        }
+        
+        .btn-read {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: transparent;
+            border: 1px solid #64CAFF;
+            color: #64CAFF;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-read:hover {
+            background: #64CAFF;
+            color: #1a1a2e;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .contact-section:hover {
+            transform: translateY(-3px);
+            border-color: rgba(100, 200, 255, 0.5);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.3);
+        }
+        
+        .contact-form {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        
+        .form-group label {
+            color: #64CAFF;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            background: rgba(15, 15, 26, 0.8);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            padding: 0.6rem;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #64CAFF;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .contact-links a {
+            color: #64CAFF;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+        
+        .contact-links a:hover {
+            color: white;
+        }
+        
+        /* Messages */
+        .messages-container {
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+        
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .alert-success {
+            background: rgba(0, 200, 100, 0.2);
+            border: 1px solid #00c864;
+            color: white;
+        }
+        
+        .alert-error {
+            background: rgba(200, 0, 0, 0.2);
+            border: 1px solid #c80000;
+            color: white;
+        }
+        
+        .no-projects {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(30, 30, 50, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+        }
+        
+        .footer {
+            background: #0a0a0f;
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(100, 200, 255, 0.1);
+            font-size: 0.75rem;
+            color: #888;
+        }
+        
+        @media (max-width: 1200px) {
+            .skills-grid { grid-template-columns: repeat(2, 1fr); }
+            .soft-skills-grid { grid-template-columns: repeat(2, 1fr); }
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+            .passion-grid { grid-template-columns: repeat(2, 1fr); }
+            .hobbies-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .soft-skills-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .passion-grid { grid-template-columns: 1fr; }
+            .hobbies-grid { grid-template-columns: 1fr; }
+            .certifications-grid { grid-template-columns: 1fr; }
+            .blog-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2rem; }
+            .profile-wrapper { width: 100px; height: 100px; }
+            .profile-image-container { width: 100px; height: 100px; }
+            .nav-bar { flex-direction: column; gap: 0.5rem; }
+            .nav-links { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="moving-text-container">
+            <div class="moving-text">✦ WELCOME TO FARADAY DATA LAB ✦ WELCOME TO FARADAY DATA LAB ✦ WELCOME TO FARADAY DATA LAB ✦</div>
+        </div>
+        <div class="profile-container">
+            <div class="profile-wrapper">
+                <div class="profile-ring"></div>
+                <div class="profile-image-container">
+                    {% if profile and profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="profile-image">
+                    {% else %}
+                    <div class="placeholder-image">📸</div>
+                    {% endif %}
+                </div>
+            </div>
+            <h1>{% if profile %}{{ profile.name }}{% else %}Yahaya Eneojo Michael{% endif %}</h1>
+            <div class="title">{% if profile %}{{ profile.title }}{% else %}Data Science & Machine Learning Engineer{% endif %}</div>
+            <div class="bio">{% if profile %}{{ profile.bio }}{% else %}ML Engineer specializing in predictive modeling, anomaly detection, ETL pipelines, and business intelligence{% endif %}</div>
+        </div>
+    </header>
+    
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-name">Yahaya Eneojo Michael</div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#certifications">Certifications</a>
+            <a href="#blog">Blog</a>
+            <a href="#contact">Contact</a>
+        </div>
+        {% if profile and profile.resume_file %}
+        <a href="{{ profile.resume_file.url }}" download class="nav-resume">📄 Resume</a>
+        {% else %}
+        <a href="#" class="nav-resume" style="opacity:0.5; cursor:not-allowed;">📄 Resume</a>
+        {% endif %}
+    </div>
+    
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- About Section -->
+        <div class="title-wrapper" id="about">
+            <h2 class="section-title">About Me</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="about-section">
+            <p>I am a result-driven Data Science and Machine Learning Engineer with over 3 years of experience transforming raw data into actionable insights. I specialize in building predictive models, detecting anomalies, building classification and regression models, and creating pipelines that drive business decisions. My technical toolkit includes Python, Pandas, and NumPy for data manipulation, along with Scikit-learn and TensorFlow for machine learning development.</p>
+            <p style="margin-top: 1rem;">Beyond the code, I focus on solving real problems. Whether it's improving supplier quality, analyzing geospatial voting patterns, or predicting customer behavior, I ensure every model delivers measurable value. I believe the best data scientist doesn't just build accurate models — they build long-lasting solutions that stakeholders can trust and act upon.</p>
+        </div>
+        
+        <!-- Technical Skills -->
+        <div class="title-wrapper" id="skills">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>📊 Programming & Data</h3>
+                <ul>
+                    <li>Python</li>
+                    <li>SQL</li>
+                    <li>Pandas / NumPy</li>
+                    <li>Power BI / Excel</li>
+                </ul>
+            </div>
+            <div class="skill-card">
+                <h3>🤖 ML & AI</h3>
+                <ul>
+                    <li>TensorFlow</li>
+                    <li>Scikit-learn</li>
+                    <li>Classification / Regression</li>
+                    <li>Anomaly Detection</li>
+                </ul>
+            </div>
+            <div class="skill-card">
+                <h3>🗄️ Databases</h3>
+                <ul>
+                    <li>PostgreSQL</li>
+                    <li>MySQL</li>
+                    <li>MongoDB</li>
+                </ul>
+            </div>
+            <div class="skill-card">
+                <h3>☁️ Cloud & Deployment</h3>
+                <ul>
+                    <li>AWS</li>
+                    <li>Azure</li>
+                    <li>Docker</li>
+                    <li>Streamlit</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Projects Section -->
+        <div class="title-wrapper" id="projects">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="title-underline"></div>
+        </div>
+        
+        <div class="projects-grid">
+            {% for project in projects %}
+            <div class="project-card">
+                {% if project.main_image %}
+                <img src="{{ project.main_image.url }}" alt="{{ project.title }}" class="project-image">
+                {% else %}
+                <div class="project-image" style="background: #2d2d4a; display: flex; align-items: center; justify-content: center;">
+                    <span>No image</span>
+                </div>
+                {% endif %}
+                <div class="project-content">
+                    <h3 class="project-title">{{ project.title }}</h3>
+                    <div class="project-tech">{{ project.technologies|truncatechars:50 }}</div>
+                    <p class="project-description">{{ project.short_description|truncatechars:80 }}</p>
+                    <a href="{% url 'project_detail' slug=project.slug %}" class="btn">View Project →</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-projects">
+                <p>✨ No projects added yet.</p>
+                <p>Check back soon for my latest work!</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Certifications Section (SINGLE, CORRECT VERSION with lightbox) -->
+        {% if certifications %}
+        <div class="title-wrapper" id="certifications">
+            <h2 class="section-title">Certifications</h2>
+            <div class="section-subtitle">Professional credentials and continuous learning</div>
+            <div class="title-underline"></div>
+        </div>
+        
+        <div class="certifications-grid">
+            {% for cert in certifications %}
+            <div class="cert-card">
+                {% if cert.certificate_image %}
+                <div class="cert-image-wrapper">
+                    <img src="{{ cert.certificate_image.url }}" alt="{{ cert.title }}" class="cert-image" onclick="openCertLightbox('{{ cert.certificate_image.url }}', '{{ cert.title }} - {{ cert.issuing_organization }}')">
+                </div>
+                {% else %}
+                <div class="cert-icon">🏅</div>
+                {% endif %}
+                <div class="cert-content">
+                    <h3 class="cert-title">{{ cert.title }}</h3>
+                    <div class="cert-issuer">{{ cert.issuing_organization }}</div>
+                    <div class="cert-date">Issued: {{ cert.issue_date|date:"F Y" }}</div>
+                    {% if cert.expiry_date %}
+                    <div class="cert-expiry">Expires: {{ cert.expiry_date|date:"F Y" }}</div>
+                    {% endif %}
+                    {% if cert.credential_id %}
+                    <div class="cert-id">ID: {{ cert.credential_id }}</div>
+                    {% endif %}
+                    {% if cert.description %}
+                    <p class="cert-description">{{ cert.description }}</p>
+                    {% endif %}
+                    {% if cert.skills_covered %}
+                    <div class="cert-skills">
+                        {% for skill in cert.skills_covered.split|slice:":5" %}
+                        <span class="cert-skill">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="cert-links">
+                        {% if cert.credential_url %}
+                        <a href="{{ cert.credential_url }}" target="_blank" class="cert-link verify-link">🔗 Verify Certificate →</a>
+                        {% endif %}
+                        {% if cert.certificate_image %}
+                        <a href="javascript:void(0);" onclick="openCertLightbox('{{ cert.certificate_image.url }}', '{{ cert.title }} - {{ cert.issuing_organization }}')" class="cert-link view-link">🖼️ View Certificate →</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Soft Skills -->
+        <div class="title-wrapper">
+            <h2 class="section-title">Soft Skills</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="soft-skills-grid">
+            <div class="skill-card">
+                <h3>💬 Communication & Collaboration</h3>
+                <p>Effectively articulating complex technical concepts to diverse stakeholders and working seamlessly within cross-functional teams.</p>
+            </div>
+            <div class="skill-card">
+                <h3>📖 Data Storytelling</h3>
+                <p>Translating raw data into compelling narratives that drive decision-making.</p>
+            </div>
+            <div class="skill-card">
+                <h3>🧩 Problem Solving</h3>
+                <p>Breaking down complex challenges into manageable components and developing innovative solutions.</p>
+            </div>
+            <div class="skill-card">
+                <h3>🤝 Teamwork</h3>
+                <p>Thriving in collaborative environments, sharing knowledge, and contributing to collective success.</p>
+            </div>
+            <div class="skill-card">
+                <h3>🔍 Attention to Details</h3>
+                <p>Meticulously reviewing data, code, and outputs to ensure accuracy and quality.</p>
+            </div>
+        </div>
+        
+        <!-- Passion Section -->
+        <div class="title-wrapper">
+            <h2 class="section-title">What I'm Passionate About</h2>
+            <div class="section-subtitle">Driving forces behind my work</div>
+            <div class="title-underline"></div>
+        </div>
+        <div class="passion-grid">
+            <div class="passion-card">
+                <div class="passion-icon">👨‍🏫</div>
+                <h4>Teaching & Mentoring</h4>
+                <p>Sharing knowledge and helping others grow in data science.</p>
+            </div>
+            <div class="passion-card">
+                <div class="passion-icon">📊</div>
+                <h4>Data Storytelling</h4>
+                <p>Turning raw numbers into compelling narratives that drive action.</p>
+            </div>
+            <div class="passion-card">
+                <div class="passion-icon">🚀</div>
+                <h4>Business Impact</h4>
+                <p>Building solutions that create measurable value and drive growth.</p>
+            </div>
+            <div class="passion-card">
+                <div class="passion-icon">🤖</div>
+                <h4>AI for Social Good</h4>
+                <p>Using technology to solve real-world problems and serve humanity.</p>
+            </div>
+            <div class="passion-card">
+                <div class="passion-icon">🌍</div>
+                <h4>Driving Change</h4>
+                <p>Creating positive impact in communities through data and AI.</p>
+            </div>
+            <div class="passion-card">
+                <div class="passion-icon">👨‍👩‍👧‍👦</div>
+                <h4>Family</h4>
+                <p>My anchor and motivation, inspiring me to build a better future.</p>
+            </div>
+        </div>
+        
+        <!-- Hobbies Section -->
+        {% if profile and profile.show_hobbies_section %}
+        <div class="title-wrapper">
+            <h2 class="section-title">Hobbies & Interests</h2>
+            <div class="section-subtitle">Beyond Machine Learning & AI</div>
+            <div class="title-underline"></div>
+        </div>
+        <div class="hobbies-grid">
+            <div class="hobby-card">
+                <div class="hobby-icon">🎵</div>
+                <h4>Music & Arts</h4>
+                <p>Finding inspiration in creativity. Music helps me think differently.</p>
+            </div>
+            <div class="hobby-card">
+                <div class="hobby-icon">📚</div>
+                <h4>Reading & Learning</h4>
+                <p>Constantly curious. Learning never stops.</p>
+            </div>
+            <div class="hobby-card">
+                <div class="hobby-icon">🏋️</div>
+                <h4>Fitness & Wellness</h4>
+                <p>Healthy body, healthy mind. Keeps me focused.</p>
+            </div>
+            <div class="hobby-card">
+                <div class="hobby-icon">☕</div>
+                <h4>Coffee & Conversations</h4>
+                <p>Ideas flow better over coffee. Deep conversations spark new ideas.</p>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Blog Section -->
+        {% if site_settings and site_settings.show_blog_section and blog_posts %}
+        <div class="title-wrapper" id="blog">
+            <h2 class="section-title">Recent Writing</h2>
+            <div class="section-subtitle">Thoughts, tutorials, and project deep-dives</div>
+            <div class="title-underline"></div>
+        </div>
+        <div class="blog-grid">
+            {% for post in blog_posts %}
+            <div class="blog-card">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="blog-image">
+                {% endif %}
+                <div class="blog-content">
+                    <div class="blog-meta">{{ post.published_date|date:"M j, Y" }} · {{ post.read_time }} min read</div>
+                    <h3 class="blog-card-title">{{ post.title }}</h3>
+                    <p class="blog-summary">{{ post.summary|truncatechars:120 }}</p>
+                    <div class="blog-tags">
+                        {% for tag in post.tags.split|slice:":3" %}
+                        <span class="blog-tag">#{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'blog_detail' slug=post.slug %}" class="btn-read">Read More →</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Contact Section -->
+        <div class="title-wrapper" id="contact">
+            <h2 class="section-title">Let's Connect</h2>
+            <div class="section-subtitle">Let's collaborate to uncover insights that matter</div>
+            <div class="title-underline"></div>
+        </div>
+        <div class="contact-section">
+            <form class="contact-form" action="{% url 'send_email' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="your.email@example.com" value="michaelyahaya442@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea name="message" placeholder="Tell me about your project or how we can collaborate..." required></textarea>
+                </div>
+                <div style="text-align: center;">
+                    <button type="submit" class="btn">Send Message</button>
+                </div>
+            </form>
+            
+            <div class="contact-links">
+                <a href="{% if profile %}{{ profile.linkedin_url }}{% else %}#{% endif %}" target="_blank">🔗 LinkedIn</a>
+                <a href="{% if profile %}{{ profile.github_url }}{% else %}#{% endif %}" target="_blank">🐙 GitHub</a>
+                <a href="mailto:michaelyahaya442@gmail.com">✉️ Email</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Yahaya Eneojo Michael | Data Science & Machine Learning Engineer</p>
+        <p style="font-size: 0.65rem; margin-top: 0.3rem;">Built with Django | Faraday Data Lab</p>
+    </footer>
+    
+    <script>
+        // Certificate Lightbox Functions
+        function openCertLightbox(imageUrl, caption) {
+            let certLightbox = document.getElementById('certLightbox');
+            if (!certLightbox) {
+                certLightbox = document.createElement('div');
+                certLightbox.id = 'certLightbox';
+                certLightbox.className = 'cert-lightbox';
+                certLightbox.innerHTML = `
+                    <span class="cert-lightbox-close" onclick="closeCertLightbox()">&times;</span>
+                    <img id="certLightboxImage" class="cert-lightbox-image" src="" alt="">
+                    <div id="certLightboxCaption" class="cert-lightbox-caption"></div>
+                `;
+                document.body.appendChild(certLightbox);
+                
+                certLightbox.addEventListener('click', function(e) {
+                    if (e.target === certLightbox) {
+                        closeCertLightbox();
+                    }
+                });
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        const lightbox = document.getElementById('certLightbox');
+                        if (lightbox && lightbox.classList.contains('active')) {
+                            closeCertLightbox();
+                        }
+                    }
+                });
+            }
+            
+            const lightboxImage = document.getElementById('certLightboxImage');
+            const lightboxCaption = document.getElementById('certLightboxCaption');
+            
+            lightboxImage.src = imageUrl;
+            lightboxCaption.textContent = caption;
+            certLightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeCertLightbox() {
+            const certLightbox = document.getElementById('certLightbox');
+            if (certLightbox) {
+                certLightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+</body>
+</html>

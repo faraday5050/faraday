@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.title }} | Faraday Data Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(270deg, #1A2A5E, #2B6CB0, #1A365D, #2C5282);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            padding: 4rem 0 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .moving-text-container {
+            position: absolute;
+            top: 15px;
+            right: 0;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        
+        .moving-text {
+            display: inline-block;
+            animation: scrollRightToLeft 15s linear infinite;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 0 0 10px rgba(100, 202, 255, 0.5);
+        }
+        
+        @keyframes scrollRightToLeft {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .header::before {
+            content: "📊 🤖 📈 🧠 💻 🔍 📉 🎯 🧮 ⚙️ 📐 🔢 🔬 🧪 📡 🎲";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 70px;
+            opacity: 0.08;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            pointer-events: none;
+            animation: floatIcons 20s linear infinite;
+        }
+        
+        @keyframes floatIcons {
+            0% { transform: translateY(0px); opacity: 0.08; }
+            50% { transform: translateY(-10px); opacity: 0.12; }
+            100% { transform: translateY(0px); opacity: 0.08; }
+        }
+        
+        .header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.06"><text x="15" y="30" font-size="22">📊</text><text x="150" y="50" font-size="28">🤖</text><text x="35" y="120" font-size="18">📈</text><text x="130" y="150" font-size="24">🧠</text><text x="80" y="25" font-size="16">🔍</text><text x="10" y="180" font-size="30">💻</text><text x="160" y="100" font-size="20">📉</text><text x="100" y="190" font-size="14">🎯</text><text x="175" y="175" font-size="18">🧮</text><text x="50" y="60" font-size="12">⚙️</text></svg>');
+            background-repeat: repeat;
+            background-size: 180px;
+            pointer-events: none;
+            animation: slowFloat 30s linear infinite alternate;
+        }
+        
+        @keyframes slowFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-15px); }
+        }
+        
+        .profile-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .profile-wrapper {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+        
+        .profile-ring {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #00D4FF, #2B6CB0, #64CAFF, #00D4FF, #2B6CB0, #64CAFF, #00D4FF);
+            animation: rotateRing 3s linear infinite, pulseRing 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulseRing {
+            0% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+            50% { opacity: 1; box-shadow: 0 0 0 15px rgba(0, 212, 255, 0.2); }
+            100% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
+        
+        .profile-image-container {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            background: #1a1a2e;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .placeholder-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d2d4a, #1a1a2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #64CAFF, #00D4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .header .title {
+            font-size: 1.2rem;
+            color: #64CAFF;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        
+        .header .bio {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 0.95rem;
+            color: #d0d0d0;
+        }
+        
+        .nav-bar {
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 200, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64CAFF;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+        
+        .nav-links a:hover {
+            color: #64CAFF;
+        }
+        
+        .nav-resume {
+            background: transparent;
+            border: 1.5px solid #64CAFF;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64CAFF;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .nav-resume:hover {
+            background: #64CAFF;
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(100, 202, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #64CAFF;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+            color: white;
+        }
+        
+        .project-title {
+            color: #64CAFF;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+        
+        .main-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+        
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .gallery-image:hover {
+            transform: scale(1.05);
+            border-color: #64CAFF;
+            box-shadow: 0 0 15px rgba(100, 202, 255, 0.3);
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background: rgba(100, 202, 255, 0.15);
+            color: #64CAFF;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 0.25rem;
+            border: 1px solid rgba(100, 202, 255, 0.3);
+        }
+        
+        .section {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .section:hover {
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.15);
+        }
+        
+        .section h2 {
+            color: #64CAFF;
+            margin-bottom: 1rem;
+            border-left: 4px solid #64CAFF;
+            padding-left: 0.75rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .metric-card {
+            background: rgba(15, 15, 26, 0.6);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #64CAFF;
+        }
+        
+        .metric-label {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        
+        .links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #2B6CB0, #64CAFF);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 202, 255, 0.3);
+        }
+        
+        .footer {
+            background: #0a0a0f;
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(100, 200, 255, 0.1);
+            font-size: 0.75rem;
+            color: #888;
+        }
+        
+        .results-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .results-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .results-list li:before {
+            content: "✓";
+            color: #64CAFF;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox-image {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 50px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .lightbox-close:hover {
+            color: #64CAFF;
+        }
+        
+        .lightbox-prev, .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            color: white;
+            cursor: pointer;
+            padding: 20px;
+        }
+        
+        .lightbox-prev {
+            left: 20px;
+        }
+        
+        .lightbox-next {
+            right: 20px;
+        }
+        
+        .lightbox-prev:hover, .lightbox-next:hover {
+            color: #64CAFF;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .project-title {
+                font-size: 1.8rem;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .profile-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+            .profile-image-container {
+                width: 100px;
+                height: 100px;
+            }
+            .nav-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="moving-text-container">
+            <div class="moving-text">✦ WELCOME TO FARADAY DATA LAB ✦ WELCOME TO FARADAY DATA LAB ✦ WELCOME TO FARADAY DATA LAB ✦</div>
+        </div>
+        <div class="profile-container">
+            <div class="profile-wrapper">
+                <div class="profile-ring"></div>
+                <div class="profile-image-container">
+                    {% if profile and profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="profile-image">
+                    {% else %}
+                    <div class="placeholder-image">📸</div>
+                    {% endif %}
+                </div>
+            </div>
+            <h1>{% if profile %}{{ profile.name }}{% else %}Yahaya Eneojo Michael{% endif %}</h1>
+            <div class="title">{% if profile %}{{ profile.title }}{% else %}Data Science & Machine Learning Engineer{% endif %}</div>
+            <div class="bio">{% if profile %}{{ profile.bio }}{% else %}ML Engineer specializing in predictive modeling, anomaly detection, ETL pipelines, and business intelligence{% endif %}</div>
+        </div>
+    </header>
+    
+    <div class="nav-bar">
+        <div class="nav-name">Yahaya Eneojo Michael</div>
+        <div class="nav-links">
+            <a href="/#about">About</a>
+            <a href="/#skills">Skills</a>
+            <a href="/#projects">Projects</a>
+            <a href="/#certifications">Certifications</a>
+            <a href="/#blog">Blog</a>
+            <a href="/#contact">Contact</a>
+        </div>
+        {% if profile and profile.resume_file %}
+        <a href="{{ profile.resume_file.url }}" download class="nav-resume">📄 Resume</a>
+        {% endif %}
+    </div>
+    
+    <div class="container">
+        <a href="/#projects" class="back-link">← Back to Projects</a>
+        
+        <h1 class="project-title">{{ project.title }}</h1>
+        
+        {% if project.main_image %}
+        <img src="{{ project.main_image.url }}" alt="{{ project.title }}" class="main-image" onclick="openLightbox('{{ project.main_image.url }}', 'Main Image')">
+        {% endif %}
+        
+        <div class="section">
+            <h2>📌 Project Overview</h2>
+            <p>{{ project.full_description|linebreaks }}</p>
+        </div>
+        
+        {% if project.problem_statement %}
+        <div class="section">
+            <h2>🎯 Problem Statement</h2>
+            <p>{{ project.problem_statement|linebreaks }}</p>
+        </div>
+        {% endif %}
+        
+        {% if project.business_value %}
+        <div class="section">
+            <h2>💼 Business Value</h2>
+            <p>{{ project.business_value|linebreaks }}</p>
+        </div>
+        {% endif %}
+        
+        {% if project.data_source_preprocessing %}
+        <div class="section">
+            <h2>📊 Data Source & Preprocessing</h2>
+            <p>{{ project.data_source_preprocessing|linebreaks }}</p>
+        </div>
+        {% endif %}
+        
+        {% if site_settings.show_metrics_section and project.metrics_mae %}
+        <div class="section">
+            <h2>📈 Model Performance Metrics</h2>
+            <div class="metrics-grid">
+                {% if project.metrics_mae %}
+                <div class="metric-card">
+                    <div class="metric-value">{{ project.metrics_mae }}</div>
+                    <div class="metric-label">MAE (↓ lower is better)</div>
+                </div>
+                {% endif %}
+                {% if project.metrics_rmse %}
+                <div class="metric-card">
+                    <div class="metric-value">{{ project.metrics_rmse }}</div>
+                    <div class="metric-label">RMSE (↓ lower is better)</div>
+                </div>
+                {% endif %}
+                {% if project.metrics_r2 %}
+                <div class="metric-card">
+                    <div class="metric-value">{{ project.metrics_r2 }}</div>
+                    <div class="metric-label">R² Score (↑ higher is better)</div>
+                </div>
+                {% endif %}
+                {% if project.metrics_mape %}
+                <div class="metric-card">
+                    <div class="metric-value">{{ project.metrics_mape }}%</div>
+                    <div class="metric-label">MAPE (↓ lower is better)</div>
+                </div>
+                {% endif %}
+                {% if project.metrics_precision %}
+                <div class="metric-card">
+                    <div class="metric-value">{{ project.metrics_precision }}</div>
+                    <div class="metric-label">Precision</div>
+                </div>
+                {% endif %}
+                {% if project.metrics_recall %}
+                <div class="metric-card">
+                    <div class="metric-value">{{ project.metrics_recall }}</div>
+                    <div class="metric-label">Recall</div>
+                </div>
+                {% endif %}
+                {% if project.metrics_f1 %}
+                <div class="metric-card">
+                    <div class="metric-value">{{ project.metrics_f1 }}</div>
+                    <div class="metric-label">F1 Score</div>
+                </div>
+                {% endif %}
+            </div>
+            {% if project.metrics_dataset_size %}
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Trained on {{ project.metrics_dataset_size }} samples | Last trained: {{ project.metrics_training_date|date:"F j, Y" }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="section">
+            <h2>🛠️ Technologies Used</h2>
+            {% for tech in project.technologies.split|slice:":15" %}
+                <span class="tech-badge">{{ tech }}</span>
+            {% endfor %}
+        </div>
+        
+        {% if project.key_results %}
+        <div class="section">
+            <h2>📈 Key Results & Achievements</h2>
+            <ul class="results-list">
+                {% for line in project.key_results.splitlines %}
+                    {% if line.strip %}
+                        <li>{{ line }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        {% if project.limitations_future %}
+        <div class="section">
+            <h2>🔮 Limitations & Future Improvements</h2>
+            <p>{{ project.limitations_future|linebreaks }}</p>
+        </div>
+        {% endif %}
+        
+        {% if project.extra_image_1 or project.extra_image_2 or project.extra_image_3 or project.extra_image_4 %}
+        <div class="section">
+            <h2>🖼️ Project Gallery</h2>
+            <div class="image-gallery">
+                {% if project.extra_image_1 %}
+                <img src="{{ project.extra_image_1.url }}" class="gallery-image" onclick="openLightbox('{{ project.extra_image_1.url }}', 'Gallery Image 1')">
+                {% endif %}
+                {% if project.extra_image_2 %}
+                <img src="{{ project.extra_image_2.url }}" class="gallery-image" onclick="openLightbox('{{ project.extra_image_2.url }}', 'Gallery Image 2')">
+                {% endif %}
+                {% if project.extra_image_3 %}
+                <img src="{{ project.extra_image_3.url }}" class="gallery-image" onclick="openLightbox('{{ project.extra_image_3.url }}', 'Gallery Image 3')">
+                {% endif %}
+                {% if project.extra_image_4 %}
+                <img src="{{ project.extra_image_4.url }}" class="gallery-image" onclick="openLightbox('{{ project.extra_image_4.url }}', 'Gallery Image 4')">
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="links">
+            {% if project.github_link %}
+            <a href="{{ project.github_link }}" target="_blank" class="btn">🐙 View on GitHub</a>
+            {% endif %}
+            {% if project.live_demo_link %}
+            <a href="{{ project.live_demo_link }}" target="_blank" class="btn">🚀 Live Demo</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div id="lightbox" class="lightbox" onclick="closeLightboxOnBackground(event)">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-prev" onclick="changeImage(-1)">&#10094;</span>
+        <span class="lightbox-next" onclick="changeImage(1)">&#10095;</span>
+        <img id="lightbox-image" class="lightbox-image" src="" alt="">
+        <div id="lightbox-caption" class="lightbox-caption" style="margin-top: 20px; color: white;"></div>
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; 2025 Yahaya Eneojo Michael | Data Science & Machine Learning Engineer</p>
+    </footer>
+    
+    <script>
+        let galleryImages = [];
+        let currentImageIndex = 0;
+        
+        function collectGalleryImages() {
+            galleryImages = [];
+            const mainImg = document.querySelector('.main-image');
+            if (mainImg && mainImg.src) {
+                gallery

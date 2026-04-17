@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog_post.title }} | Faraday Data Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(270deg, #1A2A5E, #2B6CB0, #1A365D, #2C5282);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            padding: 4rem 0 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .moving-text-container {
+            position: absolute;
+            top: 15px;
+            right: 0;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        
+        .moving-text {
+            display: inline-block;
+            animation: scrollRightToLeft 15s linear infinite;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 0 0 10px rgba(100, 202, 255, 0.5);
+        }
+        
+        @keyframes scrollRightToLeft {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .header::before {
+            content: "📊 🤖 📈 🧠 💻 🔍 📉 🎯 🧮 ⚙️ 📐 🔢 🔬 🧪 📡 🎲";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 70px;
+            opacity: 0.08;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            pointer-events: none;
+            animation: floatIcons 20s linear infinite;
+        }
+        
+        @keyframes floatIcons {
+            0% { transform: translateY(0px); opacity: 0.08; }
+            50% { transform: translateY(-10px); opacity: 0.12; }
+            100% { transform: translateY(0px); opacity: 0.08; }
+        }
+        
+        .header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.06"><text x="15" y="30" font-size="22">📊</text><text x="150" y="50" font-size="28">🤖</text><text x="35" y="120" font-size="18">📈</text><text x="130" y="150" font-size="24">🧠</text><text x="80" y="25" font-size="16">🔍</text><text x="10" y="180" font-size="30">💻</text><text x="160" y="100" font-size="20">📉</text><text x="100" y="190" font-size="14">🎯</text><text x="175" y="175" font-size="18">🧮</text><text x="50" y="60" font-size="12">⚙️</text></svg>');
+            background-repeat: repeat;
+            background-size: 180px;
+            pointer-events: none;
+            animation: slowFloat 30s linear infinite alternate;
+        }
+        
+        @keyframes slowFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-15px); }
+        }
+        
+        .profile-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .profile-wrapper {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+        
+        .profile-ring {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #00D4FF, #2B6CB0, #64CAFF, #00D4FF, #2B6CB0, #64CAFF, #00D4FF);
+            animation: rotateRing 3s linear infinite, pulseRing 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulseRing {
+            0% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+            50% { opacity: 1; box-shadow: 0 0 0 15px rgba(0, 212, 255, 0.2); }
+            100% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
+        
+        .profile-image-container {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            background: #1a1a2e;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .placeholder-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d2d4a, #1a1a2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #64CAFF, #00D4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .header .title {
+            font-size: 1.2rem;
+            color: #64CAFF;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        
+        .header .bio {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 0.95rem;
+            color: #d0d0d0;
+        }
+        
+        .nav-bar {
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 200, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64CAFF;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+        
+        .nav-links a:hover {
+            color: #64CAFF;
+        }
+        
+        .nav-resume {
+            background: transparent;
+            border: 1.5px solid #64CAFF;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64CAFF;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .nav-resume:hover {
+            background: #64CAFF;
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(100, 202, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #64CAFF;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        /* BLOG CARD - Same styling as other sections */
+        .blog-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(100, 200, 255, 0.4);
+            box-shadow: 0 0 25px rgba(100, 200, 255, 0.2);
+        }
+        
+        .blog-title {
+            font-size: 2.5rem;
+            color: #64CAFF;
+            margin-bottom: 1rem;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+        
+        .blog-meta {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(100, 200, 255, 0.2);
+            text-align: center;
+        }
+        
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-tag {
+            background: rgba(100, 202, 255, 0.15);
+            color: #64CAFF;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .featured-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .featured-image:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 20px rgba(100, 202, 255, 0.2);
+        }
+        
+        /* Image Gallery */
+        .blog-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(100, 202, 255, 0.3);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+        
+        /* Blog Content Styling */
+        .blog-content {
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: #e0e0e0;
+        }
+        
+        .blog-content h1 {
+            color: #64CAFF;
+            font-size: 2rem;
+            margin: 1.5rem 0 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .blog-content h2 {
+            color: #64CAFF;
+            font-size: 1.6rem;
+            margin: 1.5rem 0 0.8rem;
+            font-family: 'Poppins', sans-serif;
+            border-left: 4px solid #64CAFF;
+            padding-left: 0.75rem;
+        }
+        
+        .blog-content h3 {
+            color: #64CAFF;
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem;
+        }
+        
+        .blog-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .blog-content ul, .blog-content ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        .blog-content li {
+            margin-bottom: 0.3rem;
+        }
+        
+        .blog-content code {
+            background: rgba(100, 202, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .blog-content pre {
+            background: #0a0a0f;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(100, 200, 255, 0.2);
+        }
+        
+        .blog-content pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.85rem;
+        }
+        
+        .blog-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            display: block;
+        }
+        
+        .blog-content blockquote {
+            border-left: 4px solid #64CAFF;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #b0b0b0;
+            font-style: italic;
+        }
+        
+        .blog-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .blog-content th, .blog-content td {
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        .blog-content th {
+            background: rgba(100, 202, 255, 0.1);
+            color: #64CAFF;
+        }
+        
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #64CAFF, transparent);
+            margin: 2rem 0;
+        }
+        
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox-image {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .lightbox-close:hover {
+            color: #64CAFF;
+            transform: scale(1.1);
+        }
+        
+        .lightbox-prev, .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            color: white;
+            cursor: pointer;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .lightbox-prev {
+            left: 20px;
+        }
+        
+        .lightbox-next {
+            right: 20px;
+        }
+        
+        .lightbox-prev:hover, .lightbox-next:hover {
+            color: #64CAFF;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .lightbox-caption {
+            margin-top: 20px;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            max-width: 80%;
+        }
+        
+        .footer {
+            background: #0a0a0f;
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(100, 200, 255, 0.1);
+            font-size: 0.75rem;
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .blog-title {
+                font-size: 1.8rem;
+            }
+            .blog-card {
+                padding: 1rem;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .profile-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+            .profile-image-container {
+                width: 100px;
+                height: 100px;
+            }
+            .nav-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .blog-gallery {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            .lightbox-prev, .lightbox-next {
+                font-size: 30px;
+                padding: 10px;
+            }
+            .lightbox-close {
+                font-size: 40px;
+                right: 20px;
+                top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="moving-text-container">
+            <div class="moving-text">✦ WELCOME TO FARADAY DATA LAB ✦ WELCOME TO FARADAY DATA LAB ✦ WELCOME TO FARADAY DATA LAB ✦</div>
+        </div>
+        <div class="profile-container">
+            <div class="profile-wrapper">
+                <div class="profile-ring"></div>
+                <div class="profile-image-container">
+                    {% if profile and profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="profile-image">
+                    {% else %}
+                    <div class="placeholder-image">📸</div>
+                    {% endif %}
+                </div>
+            </div>
+            <h1>{% if profile %}{{ profile.name }}{% else %}Yahaya Eneojo Michael{% endif %}</h1>
+            <div class="title">{% if profile %}{{ profile.title }}{% else %}Data Science & Machine Learning Engineer{% endif %}</div>
+            <div class="bio">{% if profile %}{{ profile.bio }}{% else %}ML Engineer specializing in predictive modeling, anomaly detection, ETL pipelines, and business intelligence{% endif %}</div>
+        </div>
+    </header>
+    
+    <div class="nav-bar">
+        <div class="nav-name">Yahaya Eneojo Michael</div>
+        <div class="nav-links">
+            <a href="/#about">About</a>
+            <a href="/#skills">Skills</a>
+            <a href="/#projects">Projects</a>
+            <a href="/#certifications">Certifications</a>
+            <a href="/#blog">Blog</a>
+            <a href="/#contact">Contact</a>
+        </div>
+        {% if profile and profile.resume_file %}
+        <a href="{{ profile.resume_file.url }}" download class="nav-resume">📄 Resume</a>
+        {% endif %}
+    </div>
+    
+    <div class="container">
+        <a href="/#blog" class="back-link">← Back to Blog</a>
+        
+        <!-- BLOG CARD - Wrapping all content -->
+        <div class="blog-card">
+            <h1 class="blog-title">{{ blog_post.title }}</h1>
+            
+            <div class="blog-meta">
+                📅 {{ blog_post.published_date|date:"F j, Y" }} · ⏱️ {{ blog_post.read_time }} min read
+            </div>
+            
+            {% if blog_post.tags %}
+            <div class="blog-tags">
+                {% for tag in blog_post.tags.split|slice:":5" %}
+                <span class="blog-tag">#{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if blog_post.featured_image %}
+            <img src="{{ blog_post.featured_image.url }}" alt="{{ blog_post.title }}" class="featured-image" onclick="openLightbox('{{ blog_post.featured_image.url }}', 'Featured Image')">
+            {% endif %}
+            
+            <!-- Extra Images Gallery -->
+            {% if blog_post.extra_image_1 or blog_post.extra_image_2 or blog_post.extra_image_3 or blog_post.extra_image_4 or blog_post.extra_image_5 %}
+            <div class="blog-gallery">
+                {% if blog_post.extra_image_1 %}
+                <div class="gallery-item" onclick="openLightbox('{{ blog_post.extra_image_1.url }}', 'Image 1')">
+                    <img src="{{ blog_post.extra_image_1.url }}" alt="Image 1" class="gallery-image">
+                </div>
+                {% endif %}
+                {% if blog_post.extra_image_2 %}
+                <div class="gallery-item" onclick="openLightbox('{{ blog_post.extra_image_2.url }}', 'Image 2')">
+                    <img src="{{ blog_post.extra_image_2.url }}" alt="Image 2" class="gallery-image">
+                </div>
+                {% endif %}
+                {% if blog_post.extra_image_3 %}
+                <div class="gallery-item" onclick="openLightbox('{{ blog_post.extra_image_3.url }}', 'Image 3')">
+                    <img src="{{ blog_post.extra_image_3.url }}" alt="Image 3" class="gallery-image">
+                </div>
+                {% endif %}
+                {% if blog_post.extra_image_4 %}
+                <div class="gallery-item" onclick="openLightbox('{{ blog_post.extra_image_4.url }}', 'Image 4')">
+                    <img src="{{ blog_post.extra_image_4.url }}" alt="Image 4" class="gallery-image">
+                </div>
+                {% endif %}
+                {% if blog_post.extra_image_5 %}
+                <div class="gallery-item" onclick="openLightbox('{{ blog_post.extra_image_5.url }}', 'Image 5')">
+                    <img src="{{ blog_post.extra_image_5.url }}" alt="Image 5" class="gallery-image">
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <div class="blog-content">
+                {{ blog_post.content|safe|linebreaks }}
+            </div>
+        </div>
+        <!-- END BLOG CARD -->
+    </div>
+    
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightboxOnBackground(event)">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-prev" onclick="changeImage(-1)">&#10094;</span>
+        <span class="lightbox-next" onclick="changeImage(1)">&#10095;</span>
+        <img id="lightbox-image" class="lightbox-image" src="" alt="">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; 2025 Yahaya Eneojo Michael | Data Science & Machine Learning Engineer</p>
+        <p style="font-size: 0.65rem; margin-top: 0.3rem;">Built with Django | Faraday Data Lab</p>
+    </footer>
+    
+    <script>
+        let galleryImages = [];
+        let currentImageIndex = 0;
+        
+        function collectGalleryImages() {
+            galleryImages = [];
+            
+            const featuredImg = document.querySelector('.featured-image');
+            if (featuredImg && featuredImg.src) {
+                galleryImages.push({ url: featuredImg.src, caption: 'Featured Image' });
+            }
+            
+            document.querySelectorAll('.gallery-image').forEach((img, index) => {
+                galleryImages.push({ url: img.src, caption: `Image ${index + 1}` });
+            });
+        }
+        
+        function openLightbox(imageUrl, caption) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            
+            const foundIndex = galleryImages.findIndex(img => img.url === imageUrl);
+            currentImageIndex = foundIndex !== -1 ? foundIndex : 0;
+            
+            lightboxImage.src = imageUrl;
+            lightboxCaption.textContent = caption;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function closeLightboxOnBackground(event) {
+            if (event.target === document.getElementById('lightbox')) {
+                closeLightbox();
+            }
+        }
+        
+        function changeImage(direction) {
+            if (galleryImages.length === 0) return;
+            
+            currentImageIndex = (currentImageIndex + direction + galleryImages.length) % galleryImages.length;
+            const currentImage = galleryImages[currentImageIndex];
+            
+            document.getElementById('lightbox-image').src = currentImage.url;
+            document.getElementById('lightbox-caption').textContent = currentImage.caption;
+        }
+        
+        document.addEventListener('keydown', function(event) {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.classList.contains('active')) {
+                if (event.key === 'Escape') {
+                    closeLightbox();
+                } else if (event.key === 'ArrowLeft') {
+                    changeImage(-1);
+                } else if (event.key === 'ArrowRight') {
+                    changeImage(1);
+                }
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', collectGalleryImages);
+    </script>
+</body>
+</html>
